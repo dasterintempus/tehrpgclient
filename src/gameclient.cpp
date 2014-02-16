@@ -136,24 +136,36 @@ namespace teh
 			if (line == "---")
 			{
 				_charnamesincoming = false;
-				bool ok = false;
-				QString character = QInputDialog::getItem(_parent, tr("Select Character"),
-								tr("Character:"), _charnames, 0, false, &ok);
-				if (ok && !character.isEmpty())
+				if (_charnames.size() > 0)
 				{
-					sendLine("/select " + character);
+					bool ok = false;
+					QString character = QInputDialog::getItem(_parent, tr("Select Character"),
+									tr("Character:"), _charnames, 0, false, &ok);
+					if (ok && !character.isEmpty())
+					{
+						sendLine("/select \"" + character + "\"");
+					}
 				}
+				_charnames.clear();
 			}
 			else
 			{
-				_charnames << line;
+				if (line.at(0) == '*')
+				{
+					_charnamesincoming = false; // Cancel, we're already logged in
+					_charnames.clear();
+				}
+				else
+				{
+					_charnames << line;
+				}
 			}
 		}
 		else
 		{
 			if (line == "Logged in.")
 			{
-				sendLine("/listchars");
+				//sendLine("/listchars");
 			}
 			else if (line == "Challenge:")
 			{

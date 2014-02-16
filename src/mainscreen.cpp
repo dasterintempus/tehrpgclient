@@ -1,6 +1,7 @@
 #include "mainscreen.h"
 #include "gameclient.h"
 #include <QtWidgets/QInputDialog>
+#include <QtWidgets/QScrollBar>
 #include <iostream>
 
 namespace teh
@@ -27,6 +28,8 @@ namespace teh
 	{
 		std::cerr << "Adding line: " << line.toStdString() << std::endl;
 		_ui.outputPlainTextEdit->setPlainText(_ui.outputPlainTextEdit->toPlainText() + line + "\n");
+		QScrollBar* scrollbar = _ui.scrollArea->verticalScrollBar();
+		scrollbar->setValue(scrollbar->maximum());
 	}
 	
 	void MainScreen::sendLine()
@@ -44,11 +47,11 @@ namespace teh
 		if (!_client)
 		{
 			bool ok;
-      #ifdef NDEBUG
-      QString starting = tr("localhost");
-      #else
-      QString starting = tr("home.dasterin.net");
-      #endif
+			#ifdef TEHDEBUG
+			QString starting = tr("localhost");
+			#else
+			QString starting = tr("home.dasterin.net");
+			#endif
 			QString serveraddr = QInputDialog::getText(this, tr("Enter Server Address"),
 						 tr("Server Address:"), QLineEdit::Normal,
 						 starting, &ok);
