@@ -44,9 +44,14 @@ namespace teh
 		if (!_client)
 		{
 			bool ok;
+      #ifdef NDEBUG
+      QString starting = tr("localhost");
+      #else
+      QString starting = tr("home.dasterin.net");
+      #endif
 			QString serveraddr = QInputDialog::getText(this, tr("Enter Server Address"),
 						 tr("Server Address:"), QLineEdit::Normal,
-						 tr("localhost"), &ok);
+						 starting, &ok);
 			if (ok && !serveraddr.isEmpty())
 			{
 				_client = new GameClient(this);
