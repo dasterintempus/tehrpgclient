@@ -18,6 +18,7 @@ namespace teh
 		public slots:
 			void addLine(QString line);
 			void sendLine();
+			void startGame();
 		
 		private slots:
 			void onConnectTriggered();

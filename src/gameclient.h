@@ -2,6 +2,7 @@
 
 #include <QtCore/QObject>
 #include <QtNetwork/QTcpSocket>
+#include <QtCore/QStringList>
 
 namespace teh
 {
@@ -19,6 +20,7 @@ namespace teh
 		
 		public slots:
 			void sendLine(QString line);
+			
 		
 		private slots:
 			void dataReady();
@@ -28,6 +30,7 @@ namespace teh
 		signals:
 			void lineArrived(QString line);
 			void connectionClose();
+			void beginPlaying();
 		private:
 			void examineLine(const QString& line);
 			QWidget* _parent;
@@ -35,8 +38,10 @@ namespace teh
 			QTcpSocket _socket;
 			QByteArray _outbuffer;
 		
-			bool _loggedin;
 			bool _challengenext;
+			bool _charnamesincoming;
+		
+			QStringList _charnames;
 	};
 	
 	std::string hash_sha512(const std::string& input);

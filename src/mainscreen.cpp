@@ -52,6 +52,7 @@ namespace teh
 				_client = new GameClient(this);
 				connect(_client, &GameClient::lineArrived, this, &MainScreen::addLine);
 				connect(_client, &GameClient::connectionClose, this, &MainScreen::onDisconnectTriggered);
+				connect(_client, &GameClient::beginPlaying, this, &MainScreen::startGame);
 				_client->start(serveraddr);
 			}
 		}
@@ -65,5 +66,10 @@ namespace teh
 			_client = 0;
 			addLine(tr("Disconnected."));
 		}
+	}
+	
+	void MainScreen::startGame()
+	{
+		_ui.inputLineEdit->setFocus(Qt::PopupFocusReason);
 	}
 }

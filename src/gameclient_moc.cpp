@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_teh__GameClient_t {
-    QByteArrayData data[13];
-    char stringdata[150];
+    QByteArrayData data[14];
+    char stringdata[163];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,19 +34,21 @@ QT_MOC_LITERAL(1, 16, 11),
 QT_MOC_LITERAL(2, 28, 0),
 QT_MOC_LITERAL(3, 29, 4),
 QT_MOC_LITERAL(4, 34, 15),
-QT_MOC_LITERAL(5, 50, 8),
-QT_MOC_LITERAL(6, 59, 9),
-QT_MOC_LITERAL(7, 69, 8),
-QT_MOC_LITERAL(8, 78, 5),
-QT_MOC_LITERAL(9, 84, 11),
-QT_MOC_LITERAL(10, 96, 17),
-QT_MOC_LITERAL(11, 114, 28),
-QT_MOC_LITERAL(12, 143, 5)
+QT_MOC_LITERAL(5, 50, 12),
+QT_MOC_LITERAL(6, 63, 8),
+QT_MOC_LITERAL(7, 72, 9),
+QT_MOC_LITERAL(8, 82, 8),
+QT_MOC_LITERAL(9, 91, 5),
+QT_MOC_LITERAL(10, 97, 11),
+QT_MOC_LITERAL(11, 109, 17),
+QT_MOC_LITERAL(12, 127, 28),
+QT_MOC_LITERAL(13, 156, 5)
     },
     "teh::GameClient\0lineArrived\0\0line\0"
-    "connectionClose\0sendLine\0dataReady\0"
-    "dataSent\0bytes\0socketClose\0socketStateChange\0"
-    "QAbstractSocket::SocketState\0state\0"
+    "connectionClose\0beginPlaying\0sendLine\0"
+    "dataReady\0dataSent\0bytes\0socketClose\0"
+    "socketStateChange\0QAbstractSocket::SocketState\0"
+    "state\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -56,34 +58,36 @@ static const uint qt_meta_data_teh__GameClient[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   49,    2, 0x06,
-       4,    0,   52,    2, 0x06,
+       1,    1,   54,    2, 0x06,
+       4,    0,   57,    2, 0x06,
+       5,    0,   58,    2, 0x06,
 
  // slots: name, argc, parameters, tag, flags
-       5,    1,   53,    2, 0x0a,
-       6,    0,   56,    2, 0x08,
-       7,    1,   57,    2, 0x08,
-       9,    0,   60,    2, 0x08,
-      10,    1,   61,    2, 0x08,
+       6,    1,   59,    2, 0x0a,
+       7,    0,   62,    2, 0x08,
+       8,    1,   63,    2, 0x08,
+      10,    0,   66,    2, 0x08,
+      11,    1,   67,    2, 0x08,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
+    QMetaType::Void,
     QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::LongLong,    8,
+    QMetaType::Void, QMetaType::LongLong,    9,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 11,   12,
+    QMetaType::Void, 0x80000000 | 12,   13,
 
        0        // eod
 };
@@ -95,11 +99,12 @@ void teh::GameClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
         switch (_id) {
         case 0: _t->lineArrived((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 1: _t->connectionClose(); break;
-        case 2: _t->sendLine((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 3: _t->dataReady(); break;
-        case 4: _t->dataSent((*reinterpret_cast< qint64(*)>(_a[1]))); break;
-        case 5: _t->socketClose(); break;
-        case 6: _t->socketStateChange((*reinterpret_cast< QAbstractSocket::SocketState(*)>(_a[1]))); break;
+        case 2: _t->beginPlaying(); break;
+        case 3: _t->sendLine((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 4: _t->dataReady(); break;
+        case 5: _t->dataSent((*reinterpret_cast< qint64(*)>(_a[1]))); break;
+        case 6: _t->socketClose(); break;
+        case 7: _t->socketStateChange((*reinterpret_cast< QAbstractSocket::SocketState(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -115,6 +120,12 @@ void teh::GameClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
             typedef void (GameClient::*_t)();
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GameClient::connectionClose)) {
                 *result = 1;
+            }
+        }
+        {
+            typedef void (GameClient::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GameClient::beginPlaying)) {
+                *result = 2;
             }
         }
     }
@@ -145,13 +156,13 @@ int teh::GameClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }
@@ -167,5 +178,11 @@ void teh::GameClient::lineArrived(QString _t1)
 void teh::GameClient::connectionClose()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, 0);
+}
+
+// SIGNAL 2
+void teh::GameClient::beginPlaying()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, 0);
 }
 QT_END_MOC_NAMESPACE

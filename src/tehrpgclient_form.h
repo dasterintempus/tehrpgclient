@@ -70,6 +70,7 @@ public:
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         scrollArea = new QScrollArea(centralwidget);
         scrollArea->setObjectName(QStringLiteral("scrollArea"));
+        scrollArea->setFocusPolicy(Qt::WheelFocus);
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
@@ -79,6 +80,7 @@ public:
         horizontalLayout->setContentsMargins(3, 3, 3, 3);
         outputPlainTextEdit = new QPlainTextEdit(scrollAreaWidgetContents);
         outputPlainTextEdit->setObjectName(QStringLiteral("outputPlainTextEdit"));
+        outputPlainTextEdit->setFocusPolicy(Qt::NoFocus);
         outputPlainTextEdit->setReadOnly(true);
 
         horizontalLayout->addWidget(outputPlainTextEdit);
@@ -117,6 +119,9 @@ public:
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
         MainWindow->setStatusBar(statusbar);
+        QWidget::setTabOrder(inputLineEdit, enterButton);
+        QWidget::setTabOrder(enterButton, scrollArea);
+        QWidget::setTabOrder(scrollArea, outputPlainTextEdit);
 
         menubar->addAction(menuGame->menuAction());
         menubar->addAction(menuHelp->menuAction());

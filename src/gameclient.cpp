@@ -9,7 +9,7 @@
 namespace teh
 {
 	GameClient::GameClient(QWidget* parent)
-		: QObject(parent), _parent(parent), _loggedin(false), _challengenext(false)
+		: QObject(parent), _parent(parent), _challengenext(false), _charnamesincoming(false)
 	{
 		
 	}
@@ -64,12 +64,12 @@ namespace teh
 	
 	void GameClient::dataReady()
 	{
-		std::cerr << "Data ready " << _socket.bytesAvailable() << std::endl;
+		//std::cerr << "Data ready " << _socket.bytesAvailable() << std::endl;
 		while (_socket.canReadLine())
 		{
 			char data[4096];
 			qint64 bytesread = _socket.readLine(data, sizeof(data));
-			std::cerr << "Data read (" << bytesread << ") " << data << std::endl;
+			//std::cerr << "Data read (" << bytesread << ") " << data << std::endl;
 			std::string str(data);
 			if (str == "")
 				continue;
@@ -112,8 +112,6 @@ namespace teh
 	
 	void GameClient::examineLine(const QString& line)
 	{
-		if (_loggedin)
-			return;
 		if (_challengenext)
 		{
 			_challengenext = false;
@@ -133,15 +131,41 @@ namespace teh
 				emit connectionClose();
 			}
 		}
+		else if (_charnamesincoming)
+		{
+			if (line == "---")
+			{
+				_charnamesincoming = false;
+				bool ok = false;
+				QString character = QInputDialog::getItem(_parent, tr("Select Character"),
+								tr("Character:"), _charnames, 0, false, &ok);
+				if (ok && !character.isEmpty())
+				{
+					sendLine("/select " + character);
+				}
+			}
+			else
+			{
+				_charnames << line;
+			}
+		}
 		else
 		{
 			if (line == "Logged in.")
 			{
-				_loggedin = true;
+				sendLine("/listchars");
 			}
 			else if (line == "Challenge:")
 			{
 				_challengenext = true;
+			}
+			else if (line == "Characters:")
+			{
+				_charnamesincoming = true;
+			}
+			else if (line.mid(0, 20) == "Selected character: ")
+			{
+				emit beginPlaying();
 			}
 		}
 	}
