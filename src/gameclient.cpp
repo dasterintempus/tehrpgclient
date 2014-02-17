@@ -66,11 +66,10 @@ namespace teh
 			char data[4096];
 			qint64 bytesread = _socket.readLine(data, sizeof(data));
 			//std::cerr << "Data read (" << bytesread << ") " << data << std::endl;
-			std::string str(data);
-			if (str == "")
-				continue;
 			QString qstr(data);
 			qstr = qstr.mid(0, qstr.size()-1);
+			if (qstr == "")
+				continue;
 			std::cerr << "Read line: '" << qstr.toStdString() << "'" << std::endl;
 			examineLine(qstr);
 			emit lineArrived(qstr);
