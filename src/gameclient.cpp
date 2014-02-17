@@ -35,16 +35,12 @@ namespace teh
 			emit lineArrived(tr("Connected!"));
 			
 			bool ok;
-			QString username = QInputDialog::getText(_parent, tr("Enter Username"),
+			QString username = QInputDialog::getText(_parent, tr("Login"),
 						 tr("Username:"), QLineEdit::Normal,
 						 tr(""), &ok);
 			if (ok && !username.isEmpty())
 			{
 				sendLine("/login " + username);
-			}
-			else
-			{
-				emit connectionClose();
 			}
 		}
 		else
