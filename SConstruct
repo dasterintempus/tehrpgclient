@@ -1,5 +1,8 @@
 import os
 import os.path
+import shutil
+import subprocess
+import SCons.Util
 
 if "LD_LIBRARY_PATH" in os.environ:
 	os.environ["LD_LIBRARY_PATH"] = os.path.expanduser("~/lib") + ":" + os.path.expanduser("~/Qt/lib") + ":%s" % os.environ["LD_LIBRARY_PATH"]
@@ -86,5 +89,27 @@ if env["PLATFORM"] != "win32":
 	gdb = env.Command(source=buildpath, target="gdbcerr.log", action="gdb -ex 'run 2> $TARGET' $SOURCE")
 	env.AlwaysBuild(gdb)
 	env.Alias("gdb", gdb)
+else:
+  def distzip(source, target, env):
+    if SCons.Util.is_List(source):
+      source = source[0]
+    
+    basename = os.path.basename(str(source))
+    if basename[-4:] == ".exe":
+      dirname = basename[:-4]
+    else:
+      dirname = basename
+    
+    if SCons.Util.is_List(target):
+      target = target[0]
+    
+    if os.path.isdir(os.path.join("dist", dirname)):
+      shutil.rmtree(os.path.join("dist", dirname))
+    shutil.copytree(os.path.join("dist", "dlls"), os.path.join("dist", dirname))
+    shutil.copy(str(source), os.path.join("dist", dirname, basename))
+    subprocess.check_call("7z a -tzip %s %s" % (target, dirname), cwd="./dist")
+    
+  distzip = env.Command(source=client, target="tehrpgclient.zip", action=distzip)
+  env.Alias("dist", distzip)
 
 env.Default(client)
