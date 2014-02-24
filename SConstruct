@@ -9,19 +9,19 @@ if "LD_LIBRARY_PATH" in os.environ:
 else:
 	os.environ["LD_LIBRARY_PATH"] = os.path.expanduser("~/lib") + ":" + os.path.expanduser("~/Qt/lib")
 
-env = Environment(ENV = os.environ)
-
-if env["PLATFORM"] != "win32":
-	env.Append(CXXFLAGS="-fPIC")
+env = Environment(ENV = {'PATH' : os.environ['PATH']}, TOOLS=["mingw"])
 
 if env["PLATFORM"] != "win32":
 	env.Replace(CC = "clang")
 	env.Replace(CXX = "clang++")
 else:
-	env.Replace(tools = ['mingw'])
+	env.Replace(TOOLS = ["mingw"])
 
 if ARGUMENTS.get("verbose", 0):
 	env.Append(CXXFLAGS = "-v")
+
+if env["PLATFORM"] != "win32":
+	env.Append(CXXFLAGS="-fPIC")
 
 if ARGUMENTS.get("debug", 0) or "gdb" in COMMAND_LINE_TARGETS:
 	env["MODE"] = "debug"
@@ -34,7 +34,7 @@ includedirs = []
 if env["PLATFORM"] != "win32":
 	includedirs = [os.path.expanduser("~/include"), os.path.expanduser("~/Qt/include")]
 else:
-	includedirs = [r"D:\Qt\5.2.1\mingw48_32\include", r"ext\cryptopp", r"D:\Qt\Tools\mingw48_32\include"]
+	includedirs = [r"\Qt\5.2.1\mingw48_32\include", r"ext\cryptopp", r"\Qt\Tools\mingw48_32\include"]
 
 for includedir in includedirs:
 	env.Append(CXXFLAGS = "-I" + includedir)
@@ -43,7 +43,7 @@ libdirs = []
 if env["PLATFORM"] != "win32":
 	libdirs = [os.path.expanduser("~/lib"), os.path.expanduser("~/Qt/lib")]
 else:
-	libdirs = [r"D:\Qt\5.2.1\mingw48_32\lib", r"D:\Qt\5.2.1\mingw48_32\plugins\platforms", r"D:\Qt\Tools\mingw48_32\lib"]
+	libdirs = [r"\Qt\5.2.1\mingw48_32\lib", r"\Qt\5.2.1\mingw48_32\plugins\platforms", r"\Qt\Tools\mingw48_32\lib"]
 
 env.Append(LIBPATH = libdirs)
 
@@ -81,12 +81,12 @@ if env["PLATFORM"] == "win32":
 
 client = env.Program(target=buildpath, source=sources)
 
-run = env.Command(source=buildpath, target="cerr.log", action="$SOURCE 2> $TARGET")
+run = env.Command(source=client, target="cerr.log", action="$SOURCE 2> $TARGET")
 env.AlwaysBuild(run)
 env.Alias("run", run)
 
 if env["PLATFORM"] != "win32":
-	gdb = env.Command(source=buildpath, target="gdbcerr.log", action="gdb -ex 'run 2> $TARGET' $SOURCE")
+	gdb = env.Command(source=client, target="gdbcerr.log", action="gdb -ex 'run 2> $TARGET' $SOURCE")
 	env.AlwaysBuild(gdb)
 	env.Alias("gdb", gdb)
 else:

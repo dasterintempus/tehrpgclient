@@ -4,3 +4,5 @@ build/*
 *.o
 ext/*
 dist/*
+src/*_moc.cpp
+src/*_form.h

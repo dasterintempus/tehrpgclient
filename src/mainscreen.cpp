@@ -28,12 +28,13 @@ namespace teh
 	{
 		std::cerr << "Adding line: " << line.toStdString() << std::endl;
 		_ui.outputPlainTextEdit->setPlainText(_ui.outputPlainTextEdit->toPlainText() + line + "\n");
-		QScrollBar* scrollbar = _ui.scrollArea->verticalScrollBar();
+		QScrollBar* scrollbar = _ui.outputPlainTextEdit->verticalScrollBar();
 		scrollbar->setValue(scrollbar->maximum());
 	}
 	
 	void MainScreen::sendLine()
 	{
+		_ui.inputLineEdit->rememberLine(_ui.inputLineEdit->text());
 		addLine("-> " + _ui.inputLineEdit->text());
 		if (_client)
 		{
