@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QtCore/QObject>
 #include <QtWidgets/QLineEdit>
 #include <QtGui/QKeyEvent>
 
@@ -8,7 +9,7 @@ namespace teh
 	class HistoryLineEdit
 		: public QLineEdit
 	{
-		Q_OBJECT
+		//Q_OBJECT
 		public:
 			HistoryLineEdit(QWidget* parent = 0);
 			HistoryLineEdit(const QString& text, QWidget* parent = 0);
@@ -16,6 +17,7 @@ namespace teh
 			void rememberLine(QString line);
 		protected:
 			void keyPressEvent(QKeyEvent* event);
+		signals:
 		private:
 			int _backscrollpos;
 			QVector<QString> _linehistory;

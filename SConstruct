@@ -9,7 +9,20 @@ if "LD_LIBRARY_PATH" in os.environ:
 else:
 	os.environ["LD_LIBRARY_PATH"] = os.path.expanduser("~/lib") + ":" + os.path.expanduser("~/Qt/lib")
 
-env = Environment(ENV = {'PATH' : os.environ['PATH']}, TOOLS=["mingw"])
+if "PKG_CONFIG_PATH" in os.environ:
+	pkgconfigpath = os.environ["PKG_CONFIG_PATH"] + ":" + os.path.expanduser("~/Qt/lib/pkgconfig")
+else:
+	pkgconfigpath = os.path.expanduser("~/Qt/lib/pkgconfig")
+
+env = Environment()
+env['QT5DIR'] = os.path.expanduser(os.path.join("~", "Qt"))
+env['ENV'] = os.environ
+env['ENV']['PKG_CONFIG_PATH'] = pkgconfigpath
+env.Tool('qt5')
+
+env.EnableQt5Modules(['QtGui', 'QtCore', 'QtNetwork', 'QtWidgets'])
+
+#env = Environment(ENV = {'PATH' : os.environ['PATH'], 'PKG_CONFIG_PATH' : pkgconfigpath}, TOOLS=["default", "qt5"], QT5DIR=os.path.expanduser("~/Qt"))
 
 if env["PLATFORM"] != "win32":
 	env.Replace(CC = "clang")
@@ -34,7 +47,8 @@ includedirs = []
 if env["PLATFORM"] != "win32":
 	includedirs = [os.path.expanduser("~/include"), os.path.expanduser("~/Qt/include")]
 else:
-	includedirs = [r"\Qt\5.2.1\mingw48_32\include", r"ext\cryptopp", r"\Qt\Tools\mingw48_32\include"]
+	includedirs = []
+#	includedirs = [r"\Qt\5.2.1\mingw48_32\include", r"ext\cryptopp", r"\Qt\Tools\mingw48_32\include"]
 
 for includedir in includedirs:
 	env.Append(CXXFLAGS = "-I" + includedir)
@@ -43,7 +57,8 @@ libdirs = []
 if env["PLATFORM"] != "win32":
 	libdirs = [os.path.expanduser("~/lib"), os.path.expanduser("~/Qt/lib")]
 else:
-	libdirs = [r"\Qt\5.2.1\mingw48_32\lib", r"\Qt\5.2.1\mingw48_32\plugins\platforms", r"\Qt\Tools\mingw48_32\lib"]
+	libdirs = []
+#	libdirs = [r"\Qt\5.2.1\mingw48_32\lib", r"\Qt\5.2.1\mingw48_32\plugins\platforms", r"\Qt\Tools\mingw48_32\lib"]
 
 env.Append(LIBPATH = libdirs)
 
@@ -62,17 +77,20 @@ if env["PLATFORM"] == "win32":
 	
 	libs = [cryptopp, "Qt5Core", "Qt5Gui", "Qt5Widgets", "Qt5Network", "Qt5PlatformSupport", "qwindows"]
 else:
-	libs = ["cryptopp", "Qt5Core", "Qt5Gui", "Qt5Widgets", "Qt5Network"]
+	libs = ["cryptopp"]
+#	libs = ["cryptopp", "Qt5Core", "Qt5Gui", "Qt5Widgets", "Qt5Network"]
 env.Append(LIBS = libs)
 
-env.Append(BUILDERS = {"UIC": Builder(action="uic $SOURCE -o $TARGET", prefix="../src/", suffix='_form.h', src_suffix='.ui')})
-env.Append(BUILDERS = {"MOC": Builder(action="moc $SOURCE -o $TARGET", suffix='_moc.cpp', src_suffix='.h')})
+#env.Append(BUILDERS = {"UIC": Builder(action="uic $SOURCE -o $TARGET", prefix="../src/", suffix='_form.h', src_suffix='.ui')})
+#env.Append(BUILDERS = {"MOC": Builder(action="moc $SOURCE -o $TARGET", suffix='_moc.cpp', src_suffix='.h')})
 
-uis = Glob("ui/*.ui")
-uic = env.UIC(source=uis)
+uis = Glob("src/*.ui")
+uic = env.Uic5(uis)
+#env.AlwaysBuild(uic)
 
-headers = Glob("src/*.h")
-moc = env.MOC(source=headers)
+#headers = Glob("src/*.h")
+#moc = env.Moc(source=headers)
+#env.AlwaysBuild(moc)
 
 sources = Glob("src/*.cpp")
 
@@ -80,6 +98,8 @@ if env["PLATFORM"] == "win32":
 	env.Append(LINKFLAGS="-mwindows")
 
 client = env.Program(target=buildpath, source=sources)
+
+#env.Depends(client, uic)
 
 run = env.Command(source=client, target="cerr.log", action="$SOURCE 2> $TARGET")
 env.AlwaysBuild(run)

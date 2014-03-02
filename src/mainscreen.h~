@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_tehrpgclient.h"
+#include "tehrpgclient_form.h"
 
 namespace teh
 {

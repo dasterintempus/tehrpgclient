@@ -31,7 +31,8 @@ namespace teh
 			_backscrollpos++;
 			if (_backscrollpos > _linehistory.size())
 				_backscrollpos = _linehistory.size();
-			setText(_linehistory[_backscrollpos-1]);
+			if (_linehistory.size() != 0)
+				setText(_linehistory[_backscrollpos-1]);
 		}
 		else if (key == Qt::Key_Down)
 		{

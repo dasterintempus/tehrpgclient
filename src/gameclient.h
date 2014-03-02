@@ -13,7 +13,7 @@ namespace teh
 	{
 		Q_OBJECT
 		public:
-			GameClient(QWidget* parent);
+			GameClient(QWidget* parent = 0);
 			~GameClient();
 		
 			void start(const QString& server);
